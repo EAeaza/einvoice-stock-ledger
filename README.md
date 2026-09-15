@@ -120,6 +120,23 @@ Node.js (stdlib only), vanilla HTML/JS · Python + Playwright + pywinauto (signa
 PowerShell (deploy, Excel COM) · 1C exports · Didox API · optional OpenAI-compatible LLM · built
 with Claude Code (hooks, subagents, skills) over 432 agent sessions.
 
+## Screenshots
+
+_The real code running on synthetic data. No client data appears anywhere._
+
+![The real application running on fully synthetic data: the monthly material report for a fictional wholesaler (opening, receipts, issues at cost, closing), and below it the click-through to the e-invoice line behind the oversold shrimp row; labels translated from Russian.](demo/01-material-report-drilldown.png)
+
+*The real application running on fully synthetic data: the monthly material report for a fictional wholesaler (opening, receipts, issues at cost, closing), and below it the click-through to the e-invoice line behind the oversold shrimp row; labels translated from Russian.*
+
+![The report's completeness gates on synthetic data: 12 of 13 checks pass, and one is honestly red because this demo copy was never synced with the e-invoicing platform; the month summary sits below; labels translated from Russian.](demo/02-completeness-gates.png)
+
+*The report's completeness gates on synthetic data: 12 of 13 checks pass, and one is honestly red because this demo copy was never synced with the e-invoicing platform; the month summary sits below; labels translated from Russian.*
+
+![Mutation check of the accounting-law registry: each rule's code is deliberately broken and that law's own test must turn red, and 15 of 15 mutations were caught; output translated from Russian.](demo/03-law-registry.png)
+
+*Mutation check of the accounting-law registry: each rule's code is deliberately broken and that law's own test must turn red, and 15 of 15 mutations were caught; output translated from Russian.*
+
+
 ## Access
 
 The code is private because it runs a live business. To request a walkthrough or read access, open an issue in this repository or email eazamat360@gmail.com.
