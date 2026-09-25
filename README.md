@@ -2,7 +2,7 @@
 
 A stock ledger that rebuilds a wholesaler's item-level inventory from its e-invoices and reconciles it with the accounting system.
 
-**since Jul 2026, active · 245 commits · JavaScript (Node.js) · Python · code: private**
+**since Jul 2026, active · 250 commits · JavaScript (Node.js) · Python · code: private**
 ## The problem
 
 A food wholesaler in Uzbekistan moved its 1C accounting to a *periodic* scheme: 1C keeps stock as a
