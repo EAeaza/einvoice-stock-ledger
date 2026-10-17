@@ -2,7 +2,8 @@
 
 A stock ledger that rebuilds a wholesaler's item-level inventory from its e-invoices and reconciles it with the accounting system.
 
-**since Jul 2026, active · 254 commits · JavaScript (Node.js) · Python · code: private**
+**since Jul 2026, active · JavaScript (Node.js) · Python · code: private**
+
 ## The problem
 
 A food wholesaler in Uzbekistan moved its 1C accounting to a *periodic* scheme: 1C keeps stock as a
@@ -19,13 +20,15 @@ data.
 ## What it does
 
 - **Rebuilds stock on any date** from the e-invoice stream, starting from the 1C opening balance:
-  *opening + receipts − issues*, each movement dated by the tax-code recognition rule.
+  *opening + receipts − issues*, each movement dated by the tax-code recognition rule. The
+  e-invoice corpus is refreshed by a built-in scheduler (every two hours in production).
 - **Produces the monthly material report and a stock-on-date statement**, on screen and as Excel
   print forms. Reports for real periods were produced from it and handed to the client.
 - **Traces every amount to a source invoice line.** The opening balance must match the 1C trial
   balance to the smallest currency unit, or the build stops.
 - **Makes gaps visible:** rejected, duplicate, corrected, unknown-type and missing documents go into
-  named sections and gates instead of disappearing.
+  named sections and gates instead of disappearing. Negative stock has its own screen, and a sale
+  under a product code that was never purchased is flagged on its report row.
 - **Routes judgment to people.** Operators confirm which spellings are the same product and which
   unit a line is in, working through shared queues with claim and conflict handling. The machine,
   sometimes helped by an LLM, only proposes.
@@ -43,7 +46,7 @@ flowchart LR
     X["Sales waybills .xls"]
   end
   subgraph Ledger["Stock ledger :3400"]
-    S["Sync + frozen corpus"] --> R["Rules & chains"]
+    S["Scheduled sync + local corpus"] --> R["Rules & chains"]
     R --> G["Register"]
     J["Human decision journal"] --> G
     O --> G
@@ -103,7 +106,7 @@ Documents change status retroactively, so the data never contains a closed month
 
 ## How it is verified
 
-- About 370 test scenarios for the ledger and 52 regressions for the invoice desk, run against
+- About 390 test scenarios for the ledger and 59 regressions for the invoice desk, run against
   an isolated server process.
 - A **law registry**: each accounting rule (15 today) needs a test on the final report row with
   hand-computed numbers, plus a deliberate code mutation that must turn that test red.
@@ -111,31 +114,17 @@ Documents change status retroactively, so the data never contains a closed month
 - 17 completeness gates that recompute the report independently, and 12 data-quality checks.
 - One acceptance command. Editor hooks refuse to end a work session that touched money-related
   code without a green run.
+- Continuous integration on every push and pull request. Tests that need the live e-invoice corpus
+  (kept out of git) are listed by name; any other failure turns the build red. Dependency updates
+  arrive weekly as pull requests.
 - Independent multi-agent audits with a skeptic round, including a 13-axis audit (216 findings,
   3 critical, all closed).
 
 ## Stack
 
 Node.js (stdlib only), vanilla HTML/JS · Python + Playwright + pywinauto (signature login) ·
-PowerShell (deploy, Excel COM) · 1C exports · Didox API · optional OpenAI-compatible LLM · built
-with Claude Code (hooks, subagents, skills) over 432 agent sessions.
-
-## Screenshots
-
-_The real code running on synthetic data. No client data appears anywhere._
-
-![The real application running on fully synthetic data: the monthly material report for a fictional wholesaler (opening, receipts, issues at cost, closing), and below it the click-through to the e-invoice line behind the oversold shrimp row; labels translated from Russian.](demo/01-material-report-drilldown.png)
-
-*The real application running on fully synthetic data: the monthly material report for a fictional wholesaler (opening, receipts, issues at cost, closing), and below it the click-through to the e-invoice line behind the oversold shrimp row; labels translated from Russian.*
-
-![The report's completeness gates on synthetic data: 12 of 13 checks pass, and one is honestly red because this demo copy was never synced with the e-invoicing platform; the month summary sits below; labels translated from Russian.](demo/02-completeness-gates.png)
-
-*The report's completeness gates on synthetic data: 12 of 13 checks pass, and one is honestly red because this demo copy was never synced with the e-invoicing platform; the month summary sits below; labels translated from Russian.*
-
-![Mutation check of the accounting-law registry: each rule's code is deliberately broken and that law's own test must turn red, and 15 of 15 mutations were caught; output translated from Russian.](demo/03-law-registry.png)
-
-*Mutation check of the accounting-law registry: each rule's code is deliberately broken and that law's own test must turn red, and 15 of 15 mutations were caught; output translated from Russian.*
-
+PowerShell (deploy, Excel COM) · 1C exports · Didox API · optional OpenAI-compatible LLM ·
+GitHub Actions · built with Claude Code (hooks, subagents, skills).
 
 ## Access
 
