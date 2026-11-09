@@ -2,7 +2,7 @@
 
 A stock ledger that rebuilds a wholesaler's item-level inventory from its e-invoices and reconciles it with the accounting system.
 
-**since Jul 2026, active · JavaScript (Node.js) · Python · code: private**
+**Jul 2026 – Oct 2026 · JavaScript (Node.js) · Python · code: private**
 
 ## The problem
 
